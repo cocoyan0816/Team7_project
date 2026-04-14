@@ -9,10 +9,7 @@ sources:
       - name: hr_joins
       - name: hr_quits
       - name: returns
-<<<<<<< HEAD
 
-=======
->>>>>>> 67ac36a5dc1fe1d772d6b6753a560ca8bf8d6288
   - name: web_schema
     database: LOAD
     schema: WEB_SCHEMA
