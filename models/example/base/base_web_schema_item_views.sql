@@ -8,4 +8,4 @@ SELECT
     REMOVE_FROM_CART_QUANTITY,
     "_fivetran_deleted" as _FIVETRAN_DELETE,
     DATE_TRUNC('SECOND',"_fivetran_synced") AS _FIVETRAN_SYNCED
-FROM {{ source('web_schema','item_views') }}
+FROM {{ source('web_schema', 'item_views') }}
