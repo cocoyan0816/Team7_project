@@ -1,8 +1,8 @@
 select
     _file,
     _line,
-    _modified,
-    _fivetran_synced,
+    _modified as modified_ts,
+    _fivetran_synced as _fivetran_synced_ts,
     is_refunded,
     cast(order_id as string) as order_id,
     returned_at
