@@ -1,10 +1,8 @@
-SELECT 
+SELECT
     "_fivetran_id" as _FIVETRAN_ID,
-    IP,
-    TO_TIMESTAMP(SESSION_AT) AS SESSION_TIME,
-    OS,
+    PAGE_NAME,
+    DATE_TRUNC('SECOND', VIEW_AT) AS PAGE_VIEW_TIME,
     SESSION_ID,
-    CAST(CLIENT_ID AS STRING) AS CLIENT_ID,
     "_fivetran_deleted" as _FIVETRAN_DELETE,
     DATE_TRUNC('SECOND',"_fivetran_synced") AS _fivetran_synced_TS
-FROM {{ source('web_schema', 'sessions') }}
+FROM {{ source('web_schema', 'page_views') }}
