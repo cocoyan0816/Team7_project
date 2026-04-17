@@ -9,5 +9,5 @@ select
         else null
     end as is_refunded,
     cast(order_id as string) as order_id,
-    cast(returned_at as date) as returned_at
+    returned_at as returned_at_date
 from {{ source('google_drive', 'returns') }}
