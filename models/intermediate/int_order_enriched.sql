@@ -1,4 +1,16 @@
-with orders as (
+with order_rank as (
+
+    select
+        *,
+        row_number() over (
+            partition by order_id
+            order by order_time desc
+        ) as row_n
+    from {{ ref('base_web_schema_orders') }}
+
+),
+
+orders as (
 
     select
         order_id,
@@ -9,7 +21,20 @@ with orders as (
         payment_method,
         shipping_cost,
         tax_rate
-    from {{ ref('base_web_schema_orders') }}
+    from order_rank
+    where row_n = 1
+
+),
+
+session_rank as (
+
+    select
+        *,
+        row_number() over (
+            partition by session_id
+            order by session_time desc
+        ) as row_n
+    from {{ ref('base_web_schema_sessions') }}
 
 ),
 
@@ -18,7 +43,8 @@ sessions as (
     select
         session_id,
         client_id
-    from {{ ref('base_web_schema_sessions') }}
+    from session_rank
+    where row_n = 1
 
 ),
 
