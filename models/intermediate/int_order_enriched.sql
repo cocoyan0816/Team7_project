@@ -140,7 +140,15 @@ select
     end as is_returned,
 
     coalesce(r.is_refunded, 0) as is_refunded,
-    r.returned_at_date
+    r.returned_at_date,
+
+    case
+        when coalesce(r.is_refunded, 0) = 1
+            then - coalesce(o.shipping_cost, 0)
+        else
+            coalesce(v.estimated_order_value, 0) * (1 + coalesce(o.tax_rate, 0))
+            - coalesce(o.shipping_cost, 0)
+    end as profit
 
 from orders o
 left join sessions s
