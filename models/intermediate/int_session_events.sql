@@ -15,7 +15,7 @@ with sessions as (
             ip,
             row_number() over (
                 partition by session_id
-                order by session_time asc
+                order by session_time desc
             ) as rn
         from {{ ref('base_web_schema_sessions') }}
     )
@@ -68,7 +68,7 @@ orders_deduped as (
             order_time,
             row_number() over (
                 partition by order_id
-                order by order_time asc
+                order by order_time desc
             ) as rn
         from {{ ref('base_web_schema_orders') }}
     )

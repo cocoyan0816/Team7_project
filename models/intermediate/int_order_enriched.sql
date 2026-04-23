@@ -4,7 +4,7 @@ with order_rank as (
         *,
         row_number() over (
             partition by order_id
-            order by order_time desc
+            order by order_time desc, session_id desc
         ) as row_n
     from {{ ref('base_web_schema_orders') }}
 
@@ -32,7 +32,7 @@ session_rank as (
         *,
         row_number() over (
             partition by session_id
-            order by session_time desc
+            order by session_time desc, client_id desc
         ) as row_n
     from {{ ref('base_web_schema_sessions') }}
 
@@ -48,13 +48,28 @@ sessions as (
 
 ),
 
+returns_rank as (
+
+    select
+        order_id,
+        is_refunded,
+        returned_at_date,
+        row_number() over (
+            partition by order_id
+            order by returned_at_date desc
+        ) as row_n
+    from {{ ref('base_google_drive_returns') }}
+
+),
+
 returns as (
 
     select
         order_id,
         is_refunded,
         returned_at_date
-    from {{ ref('base_google_drive_returns') }}
+    from returns_rank
+    where row_n = 1
 
 ),
 
