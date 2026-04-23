@@ -4,8 +4,19 @@ with sessions as (
         client_id,
         session_id,
         session_time
-    from {{ ref('base_web_schema_sessions')}}
-    where client_id is not null
+    from (
+        select
+            client_id,
+            session_id,
+            session_time,
+            row_number() over (
+                partition by session_id
+                order by session_time asc
+            ) as rn
+        from {{ ref('base_web_schema_sessions') }}
+        where client_id is not null
+    )
+    where rn = 1
 
 ),
 
@@ -16,8 +27,21 @@ orders as (
         session_id,
         client_name,
         order_time,
-        state as shipping_state
-    from {{ ref('base_web_schema_orders')}}
+        shipping_state
+    from (
+        select
+            order_id,
+            session_id,
+            client_name,
+            order_time,
+            state as shipping_state,
+            row_number() over (
+                partition by order_id
+                order by order_time asc
+            ) as rn
+        from {{ ref('base_web_schema_orders') }}
+    )
+    where rn = 1
 
 ),
 
