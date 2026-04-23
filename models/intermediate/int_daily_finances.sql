@@ -1,55 +1,72 @@
-with revenue as (
+with all_dates as (
+
+    select date from {{ ref('int_daily_revenue') }}
+    union distinct
+    select date from {{ ref('int_daily_refunds') }}
+    union distinct
+    select date from {{ ref('int_daily_costs') }}
+
+),
+
+daily_revenue as (
 
     select
         date,
-        coalesce(daily_product_revenue, 0) as daily_product_revenue,
-        coalesce(daily_shipping_revenue, 0) as daily_shipping_revenue,
-        coalesce(daily_revenue, 0) as daily_revenue
+        daily_product_revenue,
+        daily_order_count
     from {{ ref('int_daily_revenue') }}
 
 ),
 
-costs as (
+daily_refunds as (
 
     select
         date,
-        coalesce(other_expense_amount, 0) as other_expense_amount,
-        coalesce(salary_cost_amount, 0) as salary_cost_amount,
-        coalesce(total_cost_amount, 0) as total_cost_amount
-    from {{ ref('int_daily_costs') }}
+        returned_order_count,
+        refunded_order_count,
+        estimated_return_value,
+        estimated_refund_value
+    from {{ ref('int_daily_refunds') }}
 
 ),
 
-refunds as (
+daily_costs as (
 
     select
         date,
-        coalesce(returned_order_count, 0) as returned_order_count,
-        coalesce(refunded_order_count, 0) as refunded_order_count,
-        coalesce(estimated_return_value, 0) as estimated_return_value,
-        coalesce(estimated_refund_value, 0) as estimated_refund_value
-    from {{ ref('int_daily_refunds') }}
+        other_expense_amount,
+        salary_cost_amount,
+        shipping_cost_amount,
+        total_cost_amount
+    from {{ ref('int_daily_costs') }}
 
 )
 
 select
-    r.date,
-    r.daily_product_revenue,
-    r.daily_shipping_revenue,
-    r.daily_revenue,
-    coalesce(c.other_expense_amount, 0) as other_expense_amount,
-    coalesce(c.salary_cost_amount, 0) as salary_cost_amount,
-    coalesce(c.total_cost_amount, 0) as total_cost_amount,
+    d.date,
+
+    coalesce(r.daily_product_revenue, 0) as daily_product_revenue,
+    coalesce(r.daily_order_count, 0) as daily_order_count,
+
     coalesce(f.returned_order_count, 0) as returned_order_count,
     coalesce(f.refunded_order_count, 0) as refunded_order_count,
     coalesce(f.estimated_return_value, 0) as estimated_return_value,
     coalesce(f.estimated_refund_value, 0) as estimated_refund_value,
-    r.daily_revenue
-        - coalesce(c.total_cost_amount, 0)
-        - coalesce(f.estimated_refund_value, 0) as profit_amount
-from revenue r
-left join costs c
-    on r.date = c.date
-left join refunds f
-    on r.date = f.date
-order by r.date
+
+    coalesce(c.other_expense_amount, 0) as other_expense_amount,
+    coalesce(c.salary_cost_amount, 0) as salary_cost_amount,
+    coalesce(c.shipping_cost_amount, 0) as shipping_cost_amount,
+    coalesce(c.total_cost_amount, 0) as total_cost_amount,
+
+    coalesce(r.daily_product_revenue, 0)
+        - coalesce(f.estimated_refund_value, 0)
+        - coalesce(c.total_cost_amount, 0) as daily_profit
+
+from all_dates d
+left join daily_revenue r
+    on d.date = r.date
+left join daily_refunds f
+    on d.date = f.date
+left join daily_costs c
+    on d.date = c.date
+order by d.date
