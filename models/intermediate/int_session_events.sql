@@ -3,10 +3,23 @@ with sessions as (
     select
         session_id,
         client_id,
-        session_time as session_at,
+        session_at,
         os,
         ip
-    from {{ ref('base_web_schema_sessions')}}
+    from (
+        select
+            session_id,
+            client_id,
+            session_time as session_at,
+            os,
+            ip,
+            row_number() over (
+                partition by session_id
+                order by session_time asc
+            ) as rn
+        from {{ ref('base_web_schema_sessions') }}
+    )
+    where rn = 1
 
 ),
 
@@ -42,14 +55,35 @@ item_view_summary as (
 
 ),
 
+orders_deduped as (
+
+    select
+        order_id,
+        session_id,
+        order_time
+    from (
+        select
+            order_id,
+            session_id,
+            order_time,
+            row_number() over (
+                partition by order_id
+                order by order_time asc
+            ) as rn
+        from {{ ref('base_web_schema_orders') }}
+    )
+    where rn = 1
+
+),
+
 orders_summary as (
 
     select
         session_id,
         1 as has_order,
-        count(distinct order_id) as order_count,
+        count(*) as order_count,
         min(order_time) as first_order_at
-    from {{ ref('base_web_schema_orders')}}
+    from orders_deduped
     group by session_id
 
 ),
