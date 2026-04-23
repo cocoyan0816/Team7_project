@@ -10,10 +10,10 @@ sources:
           loaded_at_field: _FIVETRAN_SYNCED
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 10
+              count: 5
               period: day
 
       - name: hr_joins
@@ -21,10 +21,10 @@ sources:
           loaded_at_field: _FIVETRAN_SYNCED
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 10
+              count: 5
               period: day
 
       - name: hr_quits
@@ -32,10 +32,10 @@ sources:
           loaded_at_field: _FIVETRAN_SYNCED
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 10
+              count: 5
               period: day
 
       - name: returns
@@ -43,10 +43,10 @@ sources:
           loaded_at_field: _FIVETRAN_SYNCED
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 10
+              count: 5
               period: day
 
   - name: web_schema
@@ -58,10 +58,10 @@ sources:
           loaded_at_field:  '"_fivetran_synced"'
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 30
+              count: 5
               period: day
 
       - name: orders
@@ -69,10 +69,10 @@ sources:
           loaded_at_field: '"_fivetran_synced"'
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 10
+              count: 5
               period: day
 
       - name: page_views
@@ -80,10 +80,10 @@ sources:
           loaded_at_field:  '"_fivetran_synced"'
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 10
+              count: 5
               period: day
 
       - name: sessions
@@ -91,8 +91,8 @@ sources:
           loaded_at_field: '"_fivetran_synced"'
           freshness:
             warn_after:
-              count: 8
+              count: 1
               period: day
             error_after:
-              count: 10
+              count: 5
               period: day
