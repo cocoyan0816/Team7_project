@@ -4,36 +4,95 @@ sources:
   - name: google_drive
     database: LOAD
     schema: GOOGLE_DRIVE
-    config:
-      loaded_at_field: _fivetran_synced
-      freshness:
-        warn_after:
-          count: 1
-          period: day
-        error_after:
-          count: 5
-          period: day
-
     tables:
       - name: expenses
+        config:
+          loaded_at_field: _FIVETRAN_SYNCED
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 10
+              period: day
+
       - name: hr_joins
+        config:
+          loaded_at_field: _FIVETRAN_SYNCED
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 10
+              period: day
+
       - name: hr_quits
+        config:
+          loaded_at_field: _FIVETRAN_SYNCED
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 10
+              period: day
+
       - name: returns
+        config:
+          loaded_at_field: _FIVETRAN_SYNCED
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 10
+              period: day
 
   - name: web_schema
     database: LOAD
     schema: WEB_SCHEMA
-    config:
-      loaded_at_field: _fivetran_synced
-      freshness:
-        warn_after:
-          count: 1
-          period: day
-        error_after:
-          count: 5
-          period: day
     tables:
       - name: item_views
+        config:
+          loaded_at_field:  '"_fivetran_synced"'
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 30
+              period: day
+
       - name: orders
+        config:
+          loaded_at_field: '"_fivetran_synced"'
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 10
+              period: day
+
       - name: page_views
+        config:
+          loaded_at_field:  '"_fivetran_synced"'
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 10
+              period: day
+
       - name: sessions
+        config:
+          loaded_at_field: '"_fivetran_synced"'
+          freshness:
+            warn_after:
+              count: 8
+              period: day
+            error_after:
+              count: 10
+              period: day
