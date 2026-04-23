@@ -120,10 +120,14 @@ models:
       - name: order_id
         description: Unique identifier for the order.
         tests:
+          - unique
           - not_null
 
       - name: session_id
         description: Unique identifier for the session associated with the order.
+        tests:
+          - unique
+          - not_null
 
       - name: client_id
         description: Unique identifier for the client who placed the order.
