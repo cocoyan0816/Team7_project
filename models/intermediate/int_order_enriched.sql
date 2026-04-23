@@ -4,7 +4,7 @@ with order_rank as (
         *,
         row_number() over (
             partition by order_id
-            order by order_time desc, session_id desc
+            order by order_time desc
         ) as row_n
     from {{ ref('base_web_schema_orders') }}
 
@@ -32,7 +32,7 @@ session_rank as (
         *,
         row_number() over (
             partition by session_id
-            order by session_time desc, client_id desc
+            order by session_time desc
         ) as row_n
     from {{ ref('base_web_schema_sessions') }}
 
@@ -52,7 +52,7 @@ returns_rank as (
 
     select
         order_id,
-        is_refunded,
+        coalesce(is_refunded, 0) as is_refunded,
         returned_at_date,
         row_number() over (
             partition by order_id
