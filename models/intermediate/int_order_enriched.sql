@@ -48,13 +48,28 @@ sessions as (
 
 ),
 
+returns_rank as (
+
+    select
+        order_id,
+        coalesce(is_refunded, 0) as is_refunded,
+        returned_at_date,
+        row_number() over (
+            partition by order_id
+            order by returned_at_date desc
+        ) as row_n
+    from {{ ref('base_google_drive_returns') }}
+
+),
+
 returns as (
 
     select
         order_id,
         is_refunded,
         returned_at_date
-    from {{ ref('base_google_drive_returns') }}
+    from returns_rank
+    where row_n = 1
 
 ),
 
