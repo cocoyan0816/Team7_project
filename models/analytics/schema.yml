@@ -114,59 +114,59 @@ models:
       - name: daily_salary_cost
         description: Daily salary cost derived from the annual salary.
 
-- name: fact_order
-  description: Fact table containing order-level transaction details, including client information, order timing, payment method, shipping details, refund/return status, and profitability metrics.
-  columns:
-       - name: order_id
-      description: Unique identifier for the order.
-      tests:
-        - unique
-        - not_null
+  - name: fact_order
+    description: Fact table containing order-level transaction details, including client information, order timing, payment method, shipping details, refund/return status, and profitability metrics.
+    columns:
+      - name: order_id
+        description: Unique identifier for the order.
+        tests:
+          - unique
+          - not_null
 
-    - name: session_id
-      description: Unique identifier for the session associated with the order.
+      - name: session_id
+        description: Unique identifier for the session associated with the order.
 
-    - name: client_id
-      description: Unique identifier for the client who placed the order.
-      tests:
-        - not_null
+      - name: client_id
+        description: Unique identifier for the client who placed the order.
+        tests:
+          - not_null
 
-    - name: order_time
-      description: Timestamp when the order was placed.
-      tests:
-        - not_null
+      - name: order_time
+        description: Timestamp when the order was placed.
+        tests:
+          - not_null
 
-    - name: client_name
-      description: Name of the client associated with the order.
+      - name: client_name
+        description: Name of the client associated with the order.
 
-    - name: shipping_state
-      description: State to which the order was shipped.
+      - name: shipping_state
+        description: State to which the order was shipped.
 
-    - name: payment_method
-      description: Payment method used for the order.
+      - name: payment_method
+        description: Payment method used for the order.
 
-    - name: shipping_cost
-      description: Shipping cost charged or incurred for the order.
+      - name: shipping_cost
+        description: Shipping cost charged or incurred for the order.
 
-    - name: tax_rate
-      description: Tax rate applied to the order.
+      - name: tax_rate
+        description: Tax rate applied to the order.
 
-    - name: estimated_order_value
-      description: Estimated total monetary value of the order.
+      - name: estimated_order_value
+        description: Estimated total monetary value of the order.
 
-    - name: is_returned
-      description: Indicator showing whether the order was returned, where 1 means returned and 0 means not returned.
+      - name: is_returned
+        description: Indicator showing whether the order was returned, where 1 means returned and 0 means not returned.
 
-    - name: is_refunded
-      description: Indicator showing whether the order was refunded, where 1 means refunded and 0 means not refunded.
+      - name: is_refunded
+        description: Indicator showing whether the order was refunded, where 1 means refunded and 0 means not refunded.
 
-    - name: returned_at_date
-      description: Date when the order was returned, if applicable.
+      - name: returned_at_date
+        description: Date when the order was returned, if applicable.
 
-    - name: profit
-      description: Profit generated from the order after accounting for relevant costs.
+      - name: profit
+        description: Profit generated from the order after accounting for relevant costs.
    
-- name: fact_session
+  - name: fact_session
     description: Fact table containing session-level web activity, including session attributes, browsing behavior, cart interactions, order activity, and an estimated order value proxy.
     columns:
       - name: session_id
@@ -194,7 +194,7 @@ models:
 
       - name: has_shop_page_view
         description: Indicator showing whether the session included at least one shop-related page view, where 1 means yes and 0 means no.
-
+      
       - name: has_item_view
         description: Indicator showing whether the session had at least one item view, where 1 means yes and 0 means no.
 
@@ -231,7 +231,6 @@ models:
 
   - name: daily_finances
     description: Daily finance summary table containing daily revenue, cost, profit, refund, and return metrics.
-
     columns:
       - name: date
         description: Calendar date for the daily finance record.
@@ -247,7 +246,7 @@ models:
       - name: daily_order_count
         description: Total number of orders placed on the date.
         tests:
-          - not_null
+         - not_null
       
       - name: returned_order_count
         description: Number of returned orders on the date.
@@ -258,7 +257,7 @@ models:
         description: Number of refunded orders on the date.
         tests:
           - not_null
-      
+        
       - name: estimated_return_value
         description: Estimated total value of returned orders for the date.
         tests:
@@ -268,9 +267,9 @@ models:
         description: Estimated total value of refunded orders for the date.
         tests:
           - not_null
-    
+      
       - name: other_expense_amount
-        description: Total non-salary and non-shipping expenses recorded on the date.
+        description: Total other expenses (tools and etc.) recorded on the date.
         tests:
           - not_null
 
@@ -283,16 +282,16 @@ models:
         description: Total shipping cost incurred on the date.
         tests:
           - not_null
-        
+       
       - name: total_cost_amount
         description: Total cost incurred on the date, including salary, shipping, and other expenses.
         tests:
           - not_null
 
       - name: daily_profit
-        description: Net profit for the date after subtracting cost amounts and accounting for refunds and returns.
+        description: Net profit for the date after subtracting cost amounts.
         tests:
-          - not_null
+           - not_null
 
 
 
